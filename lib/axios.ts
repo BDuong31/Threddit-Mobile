@@ -51,6 +51,7 @@ export const endpoints = {
         logout: "/account/signout",
         updatePasssword: "/account/updatepassword",
         updateUsername: "/account/updateusername",
+        updateEmail: "/account/updateemail",
         userInfo: "/account/getuserinfo",
     }
 }
