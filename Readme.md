@@ -6,8 +6,7 @@ A modern social media application built with Expo, React Native,  NativeWild
 
 - **Authentication**: Sign up, sign in, verify account, reset password
 
-- 👤 **Profiles**: User profiles 
-
+- 👤 **Profiles**: User profiles, edit UserProfile
 ## Tech Shark
 
 - **Frontend**: React Native with Expo
