@@ -26,7 +26,7 @@ interface verifyResetPasswordParams {
     email: string;
     verificationCode: string;
     newPassword: string;
-    confirmedPassword: string;
+    confirmedNewPassword: string;
 }
 
 interface googleSignUpParams {
@@ -74,6 +74,23 @@ export const verifyAccount = async (email: string, verificationCode: string): Pr
         email,
         verificationCode,
     } as verifyAccountParams);
+    return response.data;
+}
+
+export const resetPassword = async (email: string): Promise<SignUpResponse | null> => {
+    const response = await axiosInstance.post<SignUpResponse>(endpoints.auth.resetPassword, {
+        email,
+    } as resetPasswordParams);
+    return response.data;
+}
+
+export const verifyResetPassword = async (email: string, verificationCode: string, newPassword: string, confirmedNewPassword: string): Promise<SignUpResponse | null> => {
+    const response = await axiosInstance.post<SignUpResponse>(endpoints.auth.verifyResetPassword, {
+        email,
+        verificationCode,
+        newPassword,
+        confirmedNewPassword,
+    } as verifyResetPasswordParams);
     return response.data;
 }
 
