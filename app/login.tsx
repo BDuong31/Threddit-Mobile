@@ -16,6 +16,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../contexts/ThemeContext";
 import { signIn } from "../apis/auth"
 import { useAuth } from "contexts/AuthContext";
+import { text } from "@fortawesome/fontawesome-svg-core";
 
 export default function AuthScreen() {
     const { colors } = useTheme();
@@ -55,8 +56,17 @@ export default function AuthScreen() {
         try {
             const response = await signIn(email, password);
             console.log("Login successful:", response);
-            setToken(response?.data?.accessToken);
-            router.replace("/(tabs)");
+            Alert.alert("Thành công", "Đăng nhập thành công.", 
+             [ 
+              {
+                text: "OK",
+                onPress: () => { 
+                  setToken(response?.data?.accessToken);
+                  router.replace("/(tabs)");
+                 }
+              }
+             ]
+            );
         } catch (error) {
             console.error("Login error:", error?.message);
             Alert.alert("Lỗi", error?.message || "Đã xảy ra lỗi. Vui lòng thử lại.");

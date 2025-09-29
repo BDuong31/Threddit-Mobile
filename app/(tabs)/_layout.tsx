@@ -119,6 +119,35 @@ export default function TabLayout() {
               ),
           }}
       /> 
+      <Tabs.Screen
+          name="changePassword" 
+          options={{
+              title: "",
+              href: null,
+              headerBackground: () => (
+                <View style={{ flex: 1, backgroundColor: colors.background }} />
+              ),
+              headerTitle: () => {
+                return (
+                  <TouchableOpacity onPress={() => {  }}>
+                    <Image
+                      source={require('../../assets/icon.png')}
+                      style={{ width: 32, height: 32 }}
+                    />
+                  </TouchableOpacity>
+                );
+              },
+              headerLeft: () => (
+                <TouchableOpacity onPress={() => { router.back(); }} style={{ marginLeft: 15 }}>
+                  <FontAwesomeIcon 
+                    icon={faArrowLeft}  
+                    size={24}      
+                    color="#CDCCCD"
+                  />          
+                </TouchableOpacity>
+              ),
+          }}
+      />
     </Tabs>
     <MenuPopup 
         isVisible={isMenuVisible} 

@@ -8,7 +8,6 @@ A modern social media application built with Expo, React Native,  NativeWild
 
 - 👤 **Profiles**: User profiles, edit UserProfile
 ## Tech Shark
-
 - **Frontend**: React Native with Expo
 - **Styling**: NativeWind (Tailwind CSS for React Native)
 - **Navigation**: Expo Router

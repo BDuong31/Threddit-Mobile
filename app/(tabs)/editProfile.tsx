@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { View, Image, Text, TextInput, TouchableOpacity, Alert, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Stack, router } from 'expo-router';
 import { useTheme } from 'contexts/ThemeContext';
 import { useUser } from 'contexts/UserContext';
@@ -29,8 +29,17 @@ export default function UserInfoScreen() {
                 try {
                   const res = await signOut();
                   if (res?.statusCode === 200) {
-                    setToken(null);
-                    router.push('/login');
+                    Alert.alert('Đăng xuất', 'Bạn đã đăng xuất thành công.',
+                      [
+                        {
+                          text: 'OK',
+                          onPress: () => {
+                            setToken(null);
+                            router.push('/login');
+                          }
+                        }
+                      ]
+                    );
                   }
                 } catch (error) {
                   console.error('Error signing out:', error);
@@ -46,10 +55,19 @@ export default function UserInfoScreen() {
       };
 
   return (
-        <View className="flex h-full gap-[10px]" style={{ backgroundColor: colors.background }}>
+        <View className="flex h-full gap-[10px] pt-4" style={{ backgroundColor: colors.background }}>
           <Stack.Screen
             options={{
-              headerTitle: "",
+              headerTitle: () => {
+                return (
+                  <TouchableOpacity onPress={() => {  }}>
+                    <Image
+                      source={require('../../assets/icon.png')}
+                      style={{ width: 32, height: 32 }}
+                    />
+                  </TouchableOpacity>
+                );
+              },
               headerTitleStyle: { color: colors.text },
               headerStyle: { backgroundColor: colors.background },
 

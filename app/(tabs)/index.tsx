@@ -40,6 +40,7 @@ export default function HomeScreen() {
             console.log("Logout successful:", response);
 
             if (response?.statusCode === 200) {
+                Alert.alert("Đăng xuất", "Bạn đã đăng xuất thành công.");
                 setToken(null);
                 router.push("/login");
             }
