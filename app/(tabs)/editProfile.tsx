@@ -29,17 +29,8 @@ export default function UserInfoScreen() {
                 try {
                   const res = await signOut();
                   if (res?.statusCode === 200) {
-                    Alert.alert('Đăng xuất', 'Bạn đã đăng xuất thành công.',
-                      [
-                        {
-                          text: 'OK',
-                          onPress: () => {
-                            setToken(null);
-                            router.push('/login');
-                          }
-                        }
-                      ]
-                    );
+                    setToken(null);
+                    router.replace('/login');
                   }
                 } catch (error) {
                   console.error('Error signing out:', error);

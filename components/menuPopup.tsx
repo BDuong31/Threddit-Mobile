@@ -10,7 +10,13 @@ interface MenuPopupProps {
 }
 
 export default function MenuPopup({ isVisible, onClose }: MenuPopupProps) {
-  const { setToken } = useAuth(); 
+  const { setToken, isAuthenticated, isLoading} = useAuth();
+  
+  React.useEffect(() => {
+    if (!isLoading && !isAuthenticated) {
+      router.replace('/login');
+    }
+  }, [isAuthenticated, isLoading]);
 
   const handleLogout = async () => {
     try {
@@ -22,8 +28,6 @@ export default function MenuPopup({ isVisible, onClose }: MenuPopupProps) {
               text: 'OK',
               onPress: () => {
                 setToken(null);
-                onClose();
-                router.push('/login');
               }
             }
           ]

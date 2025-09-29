@@ -7,12 +7,13 @@ const withAuth = <P extends object>(
     WrappedComponent: React.ComponentType<P>
 ) => {
     const ComponentWithAuth = (props: P) => {
-        const { isAuthenticated, isLoading } = useAuth(); 
+        const { isAuthenticated, isLoading, token } = useAuth(); 
         const router = useRouter();
 
         useEffect(() => {
+            console.log("Auth State Changed: ", { isAuthenticated, token });
             if (!isLoading && !isAuthenticated) {
-                router.push('/login');
+                router.replace('/login');
             }
         }, [isAuthenticated, isLoading, router]);
 

@@ -17,7 +17,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ThemeToggle } from "../../components/ThemeToggle";
 import { useTheme } from "../../contexts/ThemeContext";
 
-// Cache duration in milliseconds (5 minutes)
 const CACHE_DURATION = 5 * 60 * 1000;
 
 interface UserProfile {

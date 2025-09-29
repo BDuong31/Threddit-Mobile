@@ -24,7 +24,7 @@ export default function ChangePasswordScreen() {
                         text: 'OK',
                         onPress: async () => {
                             setToken(null);
-                            router.push('/login');
+                            router.replace('/login');
                         }
                     }
                 ]);

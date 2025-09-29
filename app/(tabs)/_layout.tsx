@@ -8,8 +8,9 @@ import { useTheme } from "../../contexts/ThemeContext";
 import MenuPopup from "../../components/menuPopup";
 import { router } from "expo-router";
 import { ProfileProvider } from "contexts/UserContext";
+import withAuth from "../../HOC/with-auth";
 
-export default function TabLayout() {
+function TabLayout() {
   const { colors } = useTheme();
   const [pendingRequestCount, setPendingRequestCount] = useState(0);
   const [isMenuVisible, setMenuVisible] = useState(false); 
@@ -156,3 +157,5 @@ export default function TabLayout() {
     </ProfileProvider>
   );
 }
+
+export default withAuth(TabLayout);

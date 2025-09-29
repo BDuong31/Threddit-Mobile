@@ -42,7 +42,7 @@ export default function HomeScreen() {
             if (response?.statusCode === 200) {
                 Alert.alert("Đăng xuất", "Bạn đã đăng xuất thành công.");
                 setToken(null);
-                router.push("/login");
+                router.replace("/login");
             }
         } catch (error) {
             Alert.alert("Lỗi", "Đăng xuất thất bại. Vui lòng thử lại.");

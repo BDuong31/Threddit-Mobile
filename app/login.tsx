@@ -24,12 +24,19 @@ export default function AuthScreen() {
     const [ password, setPassword ] = useState("");
     const [ loading, setLoading ] = useState(false);
     const [ showPassword, setShowPassword ] = useState(false);
-    const { setToken } = useAuth();
+    const { setToken, isAuthenticated, token, isLoading } = useAuth();
 
     const isValidEmail = (e: string) => {
       const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return re.test(e);
     }
+
+    React.useEffect(() => {
+      if (!isLoading && isAuthenticated) {
+        router.replace('/(tabs)');
+      }
+    }, [isAuthenticated, isLoading]);
+
     const handleSignIn = async () => {
         setLoading(true);
 
@@ -62,7 +69,6 @@ export default function AuthScreen() {
                 text: "OK",
                 onPress: () => { 
                   setToken(response?.data?.accessToken);
-                  router.replace("/(tabs)");
                  }
               }
              ]
@@ -75,8 +81,6 @@ export default function AuthScreen() {
         } finally {
             setLoading(false);
         }
-
-
     }
 
   return (
