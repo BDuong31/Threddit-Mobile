@@ -189,7 +189,7 @@ export default function AuthScreen() {
 
               <TouchableOpacity onPress={() => { router.push("/forgotPassword") }}>
                 <Text style={{ color: colors.border }} className="text-[20px] text-center">
-                  Forgot Password?
+                  Quên mật khẩu?
                 </Text>
               </TouchableOpacity>
 
