@@ -1,6 +1,8 @@
 import { FontAwesome } from "@expo/vector-icons";
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faBars, faUser, faCog, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import { faHome as faHomeSolid, faUser as faUserSolid } from '@fortawesome/free-solid-svg-icons';
+import { faHome as faHomeRegular, faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons';
 import { Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, Image, View } from "react-native";
@@ -21,37 +23,53 @@ function TabLayout() {
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
-        tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: colors.border,
-          borderTopWidth: StyleSheet.hairlineWidth,
-          height: 55,
-          paddingBottom: 5,
-        },
         headerStyle: {
           backgroundColor: colors.background,
+          borderBottomColor: "transparent",
+          shadowColor: "transparent",
+          height: 50,
+          paddingBottom: 0,
+          paddingTop: 0,
+          position: "absolute",
+          borderTopWidth: 0,
+          elevation: 0, 
+        },
+        headerTitleContainerStyle: {
+          paddingVertical: 12,
         },
         headerShown: true,
+
+        tabBarStyle: {
+          backgroundColor: colors.background,
+          borderTopColor: "transparent",
+          shadowColor: "transparent",
+          height: 60,
+          paddingBottom: 5,
+          paddingTop: 5,
+          position: "absolute",
+          borderTopWidth: 0,
+          elevation: 0, 
+        }
       }}>
       <Tabs.Screen
         name="index"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesomeIcon 
-              icon={faHome}  
-              size={24}      
-              color="#CDCCCD"
-            />          
+          tabBarIcon: ({focused, color, size }) => (
+            <View className="p-2">
+              <FontAwesomeIcon 
+                icon={focused ? faHomeSolid : faHomeRegular}  
+                size={24}      
+                color={colors.icon}       
+              /> 
+            </View>         
           ),
           headerTitle: () => {
             return (
-              <TouchableOpacity onPress={() => alert('Mở Menu/Sidebar!')}>
                 <Image
                   source={require('../../assets/icon.png')}
                   style={{ width: 32, height: 32 }}
                 />
-              </TouchableOpacity>
             );
           }
         }}
@@ -60,12 +78,12 @@ function TabLayout() {
         name="profile"
         options={{
           title: "",
-          tabBarIcon: ({ color, size }) => (
-            <FontAwesomeIcon 
-              icon={faUser}  
-              size={24}      
-              color="#CDCCCD"
-            />          
+          tabBarIcon: ({focused, color, size }) => (
+              <FontAwesomeIcon 
+                icon={focused ? faUserSolid : faUserRegular}  
+                size={24}      
+                color={colors.icon}            
+              />    
           ),
           headerTitle: () => {
             return (
@@ -84,7 +102,7 @@ function TabLayout() {
                 <FontAwesomeIcon 
                   icon={faBars}  
                   size={24}      
-                  color="#CDCCCD"
+                  color={colors.icon}
                 />          
               </TouchableOpacity>
             );
@@ -114,7 +132,7 @@ function TabLayout() {
                   <FontAwesomeIcon 
                     icon={faArrowLeft}  
                     size={24}      
-                    color="#CDCCCD"
+                    color={colors.icon}
                   />          
                 </TouchableOpacity>
               ),
@@ -143,7 +161,7 @@ function TabLayout() {
                   <FontAwesomeIcon 
                     icon={faArrowLeft}  
                     size={24}      
-                    color="#CDCCCD"
+                    color={colors.icon}
                   />          
                 </TouchableOpacity>
               ),

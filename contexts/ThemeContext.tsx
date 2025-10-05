@@ -16,6 +16,14 @@ interface ThemeContextType {
     secondary: string;
     text: string;
     textSecondary: string;
+    textButton: string;
+    hover: string;
+    active: string;
+    disabled: string;
+    muted: string;
+    tag: string;
+    icon: string;
+    overlay: string;
     border: string;
     error: string;
     success: string;
@@ -31,28 +39,58 @@ const THEME_STORAGE_KEY = '@social_app_theme';
 const lightColors = {
   background: '#ffffff',
   surface: '#f8f9fa',
-  primary: '#3b82f6',
+  primary: '#0a0b0b',
   secondary: '#6b7280',
   text: '#1f2937',
   textSecondary: '#6b7280',
+  textButton: '#ffffff',
   border: '#e5e7eb',
+
+  // Màu trạng thái
   error: '#ef4444',
   success: '#10b981',
   warning: '#f59e0b',
+  info: '#3b82f6',
+
+    // UI interaction
+  hover: '#f3f4f6',         
+  active: '#e5e7eb',        
+  disabled: '#d1d5db',      
+  muted: '#9ca3af',         
+
+  // phụ trợ
+  tag: '#3b82f6',           
+  icon: '#6b7280',          
+  overlay: 'rgba(0, 0, 0, 0.4)',
 };
 
 // Dark theme colors
 const darkColors = {
-  background: '#0A0B0B',
-  surface: '#1f2937',
-  primary: '#3b82f6',
+  background: '#0a0b0b',
+  surface: '#39393c',
+  primary: '#ffffff',
   secondary: '#9ca3af',
-  text: '#f9fafb',
-  textSecondary: '#BCBDBF',
-  border: '#BCBDBF',
-  error: '#ef4444',
-  success: '#10b981',
-  warning: '#f59e0b',
+  text: '#ffffff',
+  textSecondary: '#bcbdbf',
+  textButton: '#1f2937',
+  border: '#a6a6a6',
+
+  // Màu trạng thái
+  error: '#fe0134',
+  success: '#46d246',
+  warning: '#facc15',
+  info: '#0594f2',
+
+  // UI interaction
+  hover: '#1f1e1f',
+  active: '#2a2a2c',
+  disabled: '#4b4b4d',
+  muted: '#6b7280',
+
+  // phụ trợ
+  tag: '#0594f2',
+  icon: '#cdcccd',
+  overlay: 'rgba(0, 0, 0, 0.6)',
 };
 
 export const useTheme = () => {

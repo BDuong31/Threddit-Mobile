@@ -151,14 +151,14 @@ export default function AuthScreen() {
 
                   <TouchableOpacity
                     style={{ 
-                      backgroundColor: colors.text,
+                      backgroundColor: colors.primary,
                       opacity: loading ? 0.5 : 1
                     }}
                     className="rounded-lg py-4"
                     onPress={() => {  handleVerify(); }}
                     disabled={loading}
                   >
-                    <Text className="text-white text-center font-bold text-[20px]">
+                    <Text style={{ color: colors.textButton }} className=" text-center font-bold text-[20px]">
                       {loading
                         ? "Đang xác minh..."
                         : "Xác minh"
@@ -246,9 +246,9 @@ export default function AuthScreen() {
                           onPress={() => setShowPassword(!showPassword)}
                         >  
                           <FontAwesome5
-                            name={showPassword ? "eye-slash" : "eye"}
+                            name={!showPassword ? "eye-slash" : "eye"}
                             size={20}
-                            color={colors.border}
+                            color={colors.icon}
                           />
                         </TouchableOpacity>
                       </View>
@@ -285,9 +285,9 @@ export default function AuthScreen() {
                           onPress={() => setShowConfirmedPassword(!showConfirmedPassword)}
                         >
                           <FontAwesome5
-                            name={showConfirmedPassword ? "eye-slash" : "eye"}
+                            name={!showConfirmedPassword ? "eye-slash" : "eye"}
                             size={20}
-                            color={colors.border}
+                            color={colors.icon}
                           />
                         </TouchableOpacity>
                       </View>
@@ -295,14 +295,14 @@ export default function AuthScreen() {
 
                     <TouchableOpacity
                       style={{ 
-                        backgroundColor: colors.text,
+                        backgroundColor: colors.primary,
                         opacity: loading ? 0.5 : 1
                       }}
                       className="rounded-lg py-4"
                       onPress={() => {  handleRegister(); }}
                       disabled={loading}
                     >
-                      <Text className="text-white text-center font-bold text-[20px]">
+                      <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                         {loading
                           ? "Đang đăng ký..."
                           : "Đăng ký"
@@ -313,18 +313,18 @@ export default function AuthScreen() {
                     <View style={{borderColor: colors.border}} className="border-b h-[1px]"></View>
                   </View>
 
-                  <View className="flex-row gap-[10px] items-center justify-center pt-[10px] pb-[10px]">
+                  <View className="flex-row gap-[10px] items-center justify-center pt-[10px] pb-[10px] mt-[10px]">
                     <Text style={{ color: colors.textSecondary }} className="text-[14px]">
                       Bạn đã có tài khoản?
                     </Text>
                     <TouchableOpacity
                       style={{ 
-                        backgroundColor: colors.text,
+                        backgroundColor: colors.primary,
                         opacity: loading ? 0.5 : 1
                       }}
                       className ="rounded-lg py-[12px] px-[40px]"
                       onPress={() => { router.push("/login") }}>
-                      <Text style={{ color: colors.primary }} className="text-white font-bold text-center text-[16px]">
+                      <Text style={{ color: colors.textButton }} className="font-bold text-center text-[16px]">
                         Đăng nhập
                       </Text>
                     </TouchableOpacity>

@@ -6,14 +6,19 @@ import { useUser } from 'contexts/UserContext';
 import { signOut } from 'apis/auth';
 import { useAuth } from '../../contexts/AuthContext'
 import { changePassword, updateUsername } from 'apis/user';
+import { FontAwesome5 } from '@expo/vector-icons';
 export default function ChangePasswordScreen() {
     const { colors } = useTheme();
     const [ loading, setLoading ] = useState(false);
     const [ passwordOld, setPasswordOld ] = useState("");
     const [ newPassword, setNewPassword ] = useState("");
     const [ confirmPassword, setConfirmPassword ] = useState("");
+    const [ isShowPasswordOld, setShowPasswordOld ] = useState(false);
+    const [ isShowNewPassword, setShowNewPassword ] = useState(false);
+    const [ isShowConfirmPassword, setShowConfirmPassword ] = useState(false);
     const { setToken } = useAuth();
 
+    
     const handlerChangePassword = async () => {
         setLoading(true);
         try {
@@ -51,7 +56,7 @@ export default function ChangePasswordScreen() {
                 <Text style={{ color: colors.text }} className="text-center font-bold text-[30px]">
                 Đổi mật khẩu
                 </Text>
-                <View className="space-y-4 flex gap-[25px]">
+                <View className="space-y-4 flex gap-[25px] px-[25px]">
                 <View>
                     <TextInput
                     style={{ 
@@ -68,11 +73,26 @@ export default function ChangePasswordScreen() {
                     placeholderTextColor={colors.textSecondary}
                     value={passwordOld}
                     onChangeText={setPasswordOld}
-                    secureTextEntry
+                    secureTextEntry={!isShowPasswordOld}
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="next"
                     />
+                    <TouchableOpacity
+                        style={{
+                        position: 'absolute',
+                        right: 16,
+                        top: 16,
+                        padding: 4
+                        }}
+                        onPress={() => setShowPasswordOld(!isShowPasswordOld)}
+                    >
+                        <FontAwesome5
+                        name={!isShowPasswordOld ? "eye-slash" : "eye"}
+                        size={20}
+                        color={colors.icon}
+                        />
+                    </TouchableOpacity>
                 </View>
 
                 <View>
@@ -91,11 +111,26 @@ export default function ChangePasswordScreen() {
                     placeholderTextColor={colors.textSecondary}
                     value={newPassword}
                     onChangeText={setNewPassword}
-                    secureTextEntry
+                    secureTextEntry={!isShowNewPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="next"
                     />
+                    <TouchableOpacity
+                        style={{
+                        position: 'absolute',
+                        right: 16,
+                        top: 16,
+                        padding: 4
+                        }}
+                        onPress={() => setShowNewPassword(!isShowNewPassword)}
+                    >
+                        <FontAwesome5
+                        name={!isShowNewPassword ? "eye-slash" : "eye"}
+                        size={20}
+                        color={colors.icon}
+                        />
+                  </TouchableOpacity>
                 </View>
 
                 <View>
@@ -114,11 +149,26 @@ export default function ChangePasswordScreen() {
                     placeholderTextColor={colors.textSecondary}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
-                    secureTextEntry
+                    secureTextEntry={!isShowConfirmPassword}
                     autoCapitalize="none"
                     autoCorrect={false}
                     returnKeyType="next"
                     />
+                        <TouchableOpacity
+                        style={{
+                        position: 'absolute',
+                        right: 16,
+                        top: 16,
+                        padding: 4
+                        }}
+                        onPress={() => setShowConfirmPassword(!isShowConfirmPassword)}
+                    >
+                        <FontAwesome5
+                        name={!isShowConfirmPassword ? "eye-slash" : "eye"}
+                        size={20}
+                        color={colors.icon}
+                        />
+                  </TouchableOpacity>
                 </View>
 
                 <TouchableOpacity

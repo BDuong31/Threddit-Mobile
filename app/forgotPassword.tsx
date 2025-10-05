@@ -15,13 +15,15 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useTheme } from "../contexts/ThemeContext";
 import { resetPassword, verifyResetPassword } from "apis/auth";
-
+import { FontAwesome5 } from "@expo/vector-icons";
 export default function AuthScreen() {
     const { colors } = useTheme();
     const [ email, setEmail ] = useState("");
     const [ newPassword, setNewPassword ] = useState("");
     const [ confirmPassword, setConfirmPassword ] = useState("");
     const [ verificationCode, setVerificationCode ] = useState("");
+    const [ isShowPassword, setIsShowPassword ] = useState(false);
+    const [ isShowConfirmPassword, setIsShowConfirmPassword ] = useState(false);
     const [ isSuccess, setIsSuccess ] = useState(false);
     const [ loading, setLoading ] = useState(false);
 
@@ -135,11 +137,26 @@ export default function AuthScreen() {
                   placeholderTextColor={colors.textSecondary}
                   value={newPassword}
                   onChangeText={setNewPassword}
-                  secureTextEntry
+                  secureTextEntry={!isShowPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="next"
                 />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 16,
+                    top: 16,
+                    padding: 4
+                  }}
+                  onPress={() => setIsShowPassword(!isShowPassword)}
+                >
+                  <FontAwesome5
+                    name={!isShowPassword ? "eye-slash" : "eye"}
+                    size={20}
+                    color={colors.icon}
+                  />
+                </TouchableOpacity>
               </View>
 
               <View>
@@ -158,23 +175,38 @@ export default function AuthScreen() {
                   placeholderTextColor={colors.textSecondary}
                   value={confirmPassword}
                   onChangeText={setConfirmPassword}
-                  secureTextEntry
+                  secureTextEntry={!isShowConfirmPassword}
                   autoCapitalize="none"
                   autoCorrect={false}
                   returnKeyType="next"
                 />
+                <TouchableOpacity
+                  style={{
+                    position: 'absolute',
+                    right: 16,
+                    top: 16,
+                    padding: 4
+                  }}
+                  onPress={() => setIsShowConfirmPassword(!isShowConfirmPassword)}
+                >
+                  <FontAwesome5
+                    name={!isShowConfirmPassword ? "eye-slash" : "eye"}
+                    size={20}
+                    color={colors.icon}
+                  />
+                </TouchableOpacity>
               </View>
 
               <TouchableOpacity
                 style={{ 
-                  backgroundColor: colors.text,
+                  backgroundColor: colors.primary,
                   opacity: loading ? 0.5 : 1
                 }}
                 className="rounded-lg py-4"
                 onPress={() => { handleResetPassword(); }}
                 disabled={loading}
               >
-                <Text className="text-white text-center font-bold text-[20px]">
+                <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                   {loading
                     ? "Đang làm mới..."
                     : "Làm mới mật khẩu"
@@ -212,14 +244,14 @@ export default function AuthScreen() {
 
                   <TouchableOpacity
                     style={{ 
-                      backgroundColor: colors.text,
+                      backgroundColor: colors.primary,
                       opacity: loading ? 0.5 : 1
                     }}
                     className="rounded-lg py-4"
                     onPress={() => { handleRequestResetPassword();  }}
                     disabled={loading}
                   >
-                    <Text className="text-white text-center font-bold text-[20px]">
+                    <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                       {loading
                         ? "Đang yêu cầu..."
                         : "Yêu cầu nhận lại mật khẩu"
@@ -230,18 +262,18 @@ export default function AuthScreen() {
                   <View style={{borderColor: colors.border}} className="border-b h-[1px]"></View>
                 </View>
 
-                <View className="flex-row gap-[10px] items-center justify-center pt-[10px] pb-[10px]">
+                <View className="flex-row gap-[10px] items-center justify-center pt-[10px] pb-[10px] mt-[10px]">
                   <Text style={{ color: colors.textSecondary }} className="text-[14px]">
                     Quay về đăng nhập
                   </Text>
                   <TouchableOpacity
                     style={{ 
-                      backgroundColor: colors.text,
+                      backgroundColor: colors.primary,
                       opacity: loading ? 0.5 : 1
                     }}
                     className ="rounded-lg py-[12px] px-[40px]"
                     onPress={() => { router.push("/login") }}>
-                    <Text style={{ color: colors.primary }} className="text-white font-bold text-center text-[16px]">
+                    <Text style={{ color: colors.textButton }} className="font-bold text-center text-[16px]">
                       Đăng nhập
                     </Text>
                   </TouchableOpacity>

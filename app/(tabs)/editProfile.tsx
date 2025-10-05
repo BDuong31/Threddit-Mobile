@@ -69,7 +69,7 @@ export default function UserInfoScreen() {
             <Text style={{ color: colors.text }} className="text-center font-bold text-[30px]">
               Thông tin cá nhân
             </Text>
-            <View className="flex gap-[25px] border-[1px] border-[#A6A6A6] py-[20px] px-[10px] mx-[24px]" style={{ borderRadius: 20 }}>
+            <View className="flex gap-[25px] border-[1px] py-[20px] px-[10px] mx-[24px]" style={{ borderRadius: 20, borderColor: colors.border }}>
               <View className="flex gap-[10px]">
                 <Text style={{ color: colors.textSecondary }} className="text-[25px] font-light">
                   Tên Người dùng
@@ -120,14 +120,14 @@ export default function UserInfoScreen() {
               <View className="w-full items-center">
                 <TouchableOpacity
                   style={{ 
-                    backgroundColor: colors.text,
+                    backgroundColor: colors.primary,
                     opacity: loading ? 0.5 : 1,
                   }}
                   className="rounded-lg py-5 px-[50px]"
                   onPress={() => { handleSave(); }}
                   disabled={loading}
                 >
-                  <Text className="text-white text-center font-bold text-[20px]">
+                  <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                     {loading
                       ? "Đang lưu..."
                       : "Lưu"

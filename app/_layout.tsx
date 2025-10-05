@@ -15,7 +15,7 @@ function RootLayoutContent() {
       <Stack
         screenOptions={{
           headerStyle: {
-            backgroundColor: colors.surface,
+            backgroundColor: colors.background,
           },
           headerTintColor: colors.text,
           headerTitleStyle: {

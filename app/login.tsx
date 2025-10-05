@@ -162,9 +162,9 @@ export default function AuthScreen() {
                     onPress={() => setShowPassword(!showPassword)}
                   >
                     <FontAwesome5
-                      name={showPassword ? "eye-slash" : "eye"}
+                      name={!showPassword ? "eye-slash" : "eye"}
                       size={20}
-                      color={colors.border}
+                      color={colors.icon}
                     />
                   </TouchableOpacity>
                 </View>
@@ -172,14 +172,14 @@ export default function AuthScreen() {
 
               <TouchableOpacity
                 style={{ 
-                  backgroundColor: colors.text,
+                  backgroundColor: colors.primary,
                   opacity: loading ? 0.5 : 1
                 }}
                 className="rounded-lg py-4"
                 onPress={() => { handleSignIn(); }}
                 disabled={loading}
               >
-                <Text className="text-white text-center font-bold text-[20px]">
+                <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                   {loading
                     ? "Đang đăng nhập..."
                     : "Đăng nhập"
@@ -188,7 +188,7 @@ export default function AuthScreen() {
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => { router.push("/forgotPassword") }}>
-                <Text style={{ color: colors.border }} className="text-[20px] text-center">
+                <Text style={{ color: colors.textSecondary }} className="text-[20px] text-center">
                   Quên mật khẩu?
                 </Text>
               </TouchableOpacity>
@@ -202,12 +202,12 @@ export default function AuthScreen() {
               </Text>
               <TouchableOpacity
                 style={{ 
-                  backgroundColor: colors.text,
+                  backgroundColor: colors.primary,
                   opacity: loading ? 0.5 : 1
                 }}
                 className ="rounded-lg py-[12px] px-[40px]"
                 onPress={() => { router.push("/register") }}>
-                <Text style={{ color: colors.primary }} className="text-white font-bold text-center text-[16px]">
+                <Text style={{ color: colors.textButton  }} className="font-bold text-center text-[16px]">
                   Đăng ký
                 </Text>
               </TouchableOpacity>
