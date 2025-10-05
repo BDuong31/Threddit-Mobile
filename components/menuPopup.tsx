@@ -16,7 +16,7 @@ export default function MenuPopup({ isVisible, onClose }: MenuPopupProps) {
   
   React.useEffect(() => {
     if (!isLoading && !isAuthenticated) {
-      router.replace('/login');
+      router.replace('(auth)/login');
     }
   }, [isAuthenticated, isLoading]);
 
@@ -63,22 +63,22 @@ export default function MenuPopup({ isVisible, onClose }: MenuPopupProps) {
       onRequestClose={onClose}
     >
       <TouchableOpacity 
-        className="flex-1 justify-end items-end pt-12 pr-4" 
+        className="flex-1 justify-end items-end" 
         activeOpacity={1}
         onPress={onClose}
       >
         <View 
           style={{ backgroundColor: colors.surface, borderColor: colors.border }}
-          className="absolute top-[8rem] right-[1rem] w-52 rounded-lg shadow-xl" 
+          className="absolute top-[7rem] right-[1rem] w-52 rounded-lg shadow-xl" 
         >
             <MenuItem 
                 text="Thông tin cá nhân" 
-                onPress={() => handleNavigate('/editProfile')} 
+                onPress={() => handleNavigate('/profile/editProfile')} 
                 hasArrow={true}
             />
             <MenuItem
                 text="Đổi mật khẩu"
-                onPress={() => handleNavigate('/changePassword')}
+                onPress={() => handleNavigate('/profile/changePassword')}
                 hasArrow={true}
             />
             <MenuItem text="Đăng xuất" onPress={handleLogout} isDanger={true} />

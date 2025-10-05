@@ -13,7 +13,7 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "../contexts/ThemeContext";
+import { useTheme } from "../../contexts/ThemeContext";
 import { resetPassword, verifyResetPassword } from "apis/auth";
 import { FontAwesome5 } from "@expo/vector-icons";
 export default function AuthScreen() {

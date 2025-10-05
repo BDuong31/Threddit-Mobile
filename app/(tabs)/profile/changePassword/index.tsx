@@ -1,13 +1,17 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { Stack, router } from 'expo-router';
+import React, { useLayoutEffect, useState } from 'react';
+import { Image, View, Text, TextInput, TouchableOpacity, Alert, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { Stack, router, useNavigation } from 'expo-router';
 import { useTheme } from 'contexts/ThemeContext';
 import { useUser } from 'contexts/UserContext';
 import { signOut } from 'apis/auth';
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../../../contexts/AuthContext'
 import { changePassword, updateUsername } from 'apis/user';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+
 import { FontAwesome5 } from '@expo/vector-icons';
 export default function ChangePasswordScreen() {
+    const navigation = useNavigation();
     const { colors } = useTheme();
     const [ loading, setLoading ] = useState(false);
     const [ passwordOld, setPasswordOld ] = useState("");
@@ -18,6 +22,36 @@ export default function ChangePasswordScreen() {
     const [ isShowConfirmPassword, setShowConfirmPassword ] = useState(false);
     const { setToken } = useAuth();
 
+      useLayoutEffect(() => {
+        navigation.setOptions({
+          headerTitle: () => {
+            return (
+              <TouchableOpacity onPress={() => {  }}>
+                <Image
+                  source={require('../../../../assets/icon.png')}
+                  style={{ width: 32, height: 32 }}
+                />
+              </TouchableOpacity>
+            );
+          },
+    
+          headerLeft: () => {
+            return (
+              <TouchableOpacity onPress={() => router.back()}>
+                <FontAwesomeIcon icon={faArrowLeft} size={24} color={colors.icon} />
+              </TouchableOpacity>
+            );
+          },
+          headerStyle: {
+            backgroundColor: colors.background,
+          },
+          headerTintColor: colors.text,
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+          headerShadowVisible: false, 
+        });
+      })
     
     const handlerChangePassword = async () => {
         setLoading(true);
@@ -180,7 +214,7 @@ export default function ChangePasswordScreen() {
                     onPress={() => { handlerChangePassword(); }}
                     disabled={loading}
                 >
-                    <Text className="text-white text-center font-bold text-[20px]">
+                    <Text style={{ color: colors.textButton }} className="text-center font-bold text-[20px]">
                     {loading
                         ? "Đang đổi..."
                         : "Xác nhận đổi mật khẩu"

@@ -13,8 +13,8 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { useTheme } from "../contexts/ThemeContext";
-import { signIn } from "../apis/auth"
+import { useTheme } from "../../contexts/ThemeContext";
+import { signIn } from "../../apis/auth"
 import { useAuth } from "contexts/AuthContext";
 import { text } from "@fortawesome/fontawesome-svg-core";
 

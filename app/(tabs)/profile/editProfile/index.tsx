@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useLayoutEffect, useState } from 'react';
 import { View, Image, Text, TextInput, TouchableOpacity, Alert, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
-import { Stack, router } from 'expo-router';
+import { Stack, router, useNavigation } from 'expo-router';
 import { useTheme } from 'contexts/ThemeContext';
 import { useUser } from 'contexts/UserContext';
 import { signOut } from 'apis/auth';
-import { useAuth } from '../../contexts/AuthContext'
+import { useAuth } from '../../../../contexts/AuthContext'
 import { updateUsername } from 'apis/user';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faArrowLeft, faBackspace, faBackward, faBars } from '@fortawesome/free-solid-svg-icons';
 export default function UserInfoScreen() {
+  const navigation = useNavigation();
   const { user } = useUser();
-  console.log("User data in EditProfileScreen:", user);
   const { setToken } = useAuth();
   const { colors } = useTheme();
   const [username, setUsername] = useState(user?.username || '');
@@ -17,6 +19,37 @@ export default function UserInfoScreen() {
 
   const isEmailChanged = email !== user?.email;
   const isUsernameChanged = username !== user?.username;
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => {
+        return (
+          <TouchableOpacity onPress={() => {  }}>
+            <Image
+              source={require('../../../../assets/icon.png')}
+              style={{ width: 32, height: 32 }}
+            />
+          </TouchableOpacity>
+        );
+      },
+
+      headerLeft: () => {
+        return (
+          <TouchableOpacity onPress={() => router.back()}>
+            <FontAwesomeIcon icon={faArrowLeft} size={24} color={colors.icon} />
+          </TouchableOpacity>
+        );
+      },
+      headerStyle: {
+        backgroundColor: colors.background,
+      },
+      headerTintColor: colors.text,
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      },
+      headerShadowVisible: false, 
+    });
+  })
 
   const handleSave = async () => {
     setLoading(true);
@@ -47,24 +80,6 @@ export default function UserInfoScreen() {
 
   return (
         <View className="flex h-full gap-[10px] pt-4" style={{ backgroundColor: colors.background }}>
-          <Stack.Screen
-            options={{
-              headerTitle: () => {
-                return (
-                  <TouchableOpacity onPress={() => {  }}>
-                    <Image
-                      source={require('../../assets/icon.png')}
-                      style={{ width: 32, height: 32 }}
-                    />
-                  </TouchableOpacity>
-                );
-              },
-              headerTitleStyle: { color: colors.text },
-              headerStyle: { backgroundColor: colors.background },
-
-              tabBarStyle: { display: 'none' },
-            }}
-            />
 
             <Text style={{ color: colors.text }} className="text-center font-bold text-[30px]">
               Thông tin cá nhân

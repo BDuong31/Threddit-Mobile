@@ -3,14 +3,13 @@ import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faHome, faBars, faUser, faCog, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import { faHome as faHomeSolid, faUser as faUserSolid } from '@fortawesome/free-solid-svg-icons';
 import { faHome as faHomeRegular, faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons';
-import { Tabs } from "expo-router";
+import { Stack, Tabs } from "expo-router";
 import React, { useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, Image, View } from "react-native";
 import { useTheme } from "../../contexts/ThemeContext";
 import MenuPopup from "../../components/menuPopup";
 import { router } from "expo-router";
 import { ProfileProvider } from "contexts/UserContext";
-import withAuth from "../../HOC/with-auth";
 
 function TabLayout() {
   const { colors } = useTheme();
@@ -30,15 +29,12 @@ function TabLayout() {
           height: 50,
           paddingBottom: 0,
           paddingTop: 0,
-          position: "absolute",
           borderTopWidth: 0,
           elevation: 0, 
         },
         headerTitleContainerStyle: {
           paddingVertical: 12,
         },
-        headerShown: true,
-
         tabBarStyle: {
           backgroundColor: colors.background,
           borderTopColor: "transparent",
@@ -46,7 +42,7 @@ function TabLayout() {
           height: 60,
           paddingBottom: 5,
           paddingTop: 5,
-          position: "absolute",
+          position: 'absolute',
           borderTopWidth: 0,
           elevation: 0, 
         }
@@ -55,14 +51,19 @@ function TabLayout() {
         name="index"
         options={{
           title: "",
+          href: null,
+        }}
+      />
+      <Tabs.Screen
+        name="home"
+        options={{
+          title: "",
           tabBarIcon: ({focused, color, size }) => (
-            <View className="p-2">
               <FontAwesomeIcon 
                 icon={focused ? faHomeSolid : faHomeRegular}  
                 size={24}      
                 color={colors.icon}       
               /> 
-            </View>         
           ),
           headerTitle: () => {
             return (
@@ -85,95 +86,11 @@ function TabLayout() {
                 color={colors.icon}            
               />    
           ),
-          headerTitle: () => {
-            return (
-              <TouchableOpacity onPress={() => alert('Mở Menu/Sidebar!')}>
-                <Image
-                  source={require('../../assets/icon.png')}
-                  style={{ width: 32, height: 32 }}
-                />
-              </TouchableOpacity>
-            );
-          },
-
-          headerRight: () => {
-            return (
-              <TouchableOpacity onPress={() => setMenuVisible(true)} style={{ marginRight: 15 }}>
-                <FontAwesomeIcon 
-                  icon={faBars}  
-                  size={24}      
-                  color={colors.icon}
-                />          
-              </TouchableOpacity>
-            );
-          }
         }}
       />
-      <Tabs.Screen
-          name="editProfile" 
-          options={{
-              title: "",
-              href: null,
-              headerBackground: () => (
-                <View style={{ flex: 1, backgroundColor: colors.background }} />
-              ),
-              headerTitle: () => {
-                return (
-                  <TouchableOpacity onPress={() => {  }}>
-                    <Image
-                      source={require('../../assets/icon.png')}
-                      style={{ width: 32, height: 32 }}
-                    />
-                  </TouchableOpacity>
-                );
-              },
-              headerLeft: () => (
-                <TouchableOpacity onPress={() => { router.back(); }} style={{ marginLeft: 15 }}>
-                  <FontAwesomeIcon 
-                    icon={faArrowLeft}  
-                    size={24}      
-                    color={colors.icon}
-                  />          
-                </TouchableOpacity>
-              ),
-          }}
-      /> 
-      <Tabs.Screen
-          name="changePassword" 
-          options={{
-              title: "",
-              href: null,
-              headerBackground: () => (
-                <View style={{ flex: 1, backgroundColor: colors.background }} />
-              ),
-              headerTitle: () => {
-                return (
-                  <TouchableOpacity onPress={() => {  }}>
-                    <Image
-                      source={require('../../assets/icon.png')}
-                      style={{ width: 32, height: 32 }}
-                    />
-                  </TouchableOpacity>
-                );
-              },
-              headerLeft: () => (
-                <TouchableOpacity onPress={() => { router.back(); }} style={{ marginLeft: 15 }}>
-                  <FontAwesomeIcon 
-                    icon={faArrowLeft}  
-                    size={24}      
-                    color={colors.icon}
-                  />          
-                </TouchableOpacity>
-              ),
-          }}
-      />
     </Tabs>
-    <MenuPopup 
-        isVisible={isMenuVisible} 
-        onClose={() => setMenuVisible(false)} 
-      />
     </ProfileProvider>
   );
 }
 
-export default withAuth(TabLayout);
+export default TabLayout;

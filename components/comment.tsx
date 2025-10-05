@@ -70,14 +70,8 @@ const Post: React.FC<PostProps> = ({
           color={colors.icon} 
         />
       </View>
-
-      <TouchableOpacity
-        onPress={() => {
-          router.push("home/post/123");
-        }}
-      >
-        <Text style={{ color: colors.text }} className="text-sm leading-5 mb-4">{content}</Text>
-      </TouchableOpacity>
+        
+      <Text style={{ color: colors.text }} className="text-sm leading-5 mb-4">{content}</Text>
 
       <View className="flex-row gap-[5px]">
         <View style={{ stroke: colors.icon, backgroundColor: isLiked19 ? colors.surface : isLiked ? colors.success : colors.error }} className="flex-row items-center space-x-1 p-[10px] rounded-[50px] gap-[5px]">

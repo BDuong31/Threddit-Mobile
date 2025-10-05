@@ -1,13 +1,32 @@
-import { Stack } from "expo-router";
+import { router, Stack, useSegments } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { AuthProvider } from "../contexts/AuthContext";
+import { AuthProvider, useAuth } from "../contexts/AuthContext";
 import { ThemeProvider, useTheme } from "../contexts/ThemeContext";
 import "../global.css";
 
 function RootLayoutContent() {
   const { isDark, colors } = useTheme();
+  const { isAuthenticated, isLoading } = useAuth();
+    const segments = useSegments();
+
+
+  React.useEffect(() => {
+    if (isLoading) return;
+
+    const inAuthGroup = segments[0] === '(auth)'; 
+
+    if (isAuthenticated && inAuthGroup) {
+      router.replace('/(tabs)/home/post/123');
+    } else if (!isAuthenticated && !inAuthGroup) {
+      router.replace('/(auth)/login');
+    }
+  }, [isAuthenticated, isLoading, segments]);
+
+  if (isLoading) {
+    return null; 
+  }
 
   return (
     <>
@@ -25,12 +44,13 @@ function RootLayoutContent() {
           contentStyle: {
             backgroundColor: colors.background,
           },
+          gestureEnabled: true, 
         }}>
         <Stack.Screen
           name="index"
           options={{
             title: "Social App",
-            headerShown: true,
+            headerShown: false,
           }}
         />
         <Stack.Screen
@@ -39,22 +59,14 @@ function RootLayoutContent() {
             headerShown: false,
           }}
         />
-        <Stack.Screen
-          name="login"
+          <Stack.Screen
+          name="(tabs)/home"
           options={{
             headerShown: false,
           }}
         />
-                
         <Stack.Screen
-          name="register"
-          options={{
-            headerShown: false,
-          }}
-        />
-
-        <Stack.Screen
-          name="forgotPassword"
+          name="(auth)"
           options={{
             headerShown: false,
           }}
