@@ -4,12 +4,13 @@ import { faHome, faBars, faUser, faCog, faArrowLeft } from '@fortawesome/free-so
 import { faHome as faHomeSolid, faUser as faUserSolid } from '@fortawesome/free-solid-svg-icons';
 import { faHome as faHomeRegular, faUser as faUserRegular } from '@fortawesome/free-regular-svg-icons';
 import { Stack, Tabs } from "expo-router";
-import React, { useEffect, useState } from "react";
+import React, { Children, useEffect, useState } from "react";
 import { TouchableOpacity, StyleSheet, Image, View } from "react-native";
 import { useTheme } from "../../contexts/ThemeContext";
 import MenuPopup from "../../components/menuPopup";
 import { router } from "expo-router";
 import { ProfileProvider } from "contexts/UserContext";
+import NavigationBar from "layouts/navigationBar";
 
 function TabLayout() {
   const { colors } = useTheme();
@@ -18,7 +19,80 @@ function TabLayout() {
 
   return (
     <ProfileProvider>
-    <Tabs
+      <Stack>
+        <Stack.Screen
+          name="index"
+          options={{
+            headerBackVisible: false,
+            title: "",
+            headerStyle: {
+              backgroundColor: colors.background,
+              borderBottomColor: "transparent",
+              shadowColor: "transparent",
+              height: 50,
+              paddingBottom: 0,
+              paddingTop: 0,
+              borderTopWidth: 0,
+              elevation: 0, 
+            },
+            headerTitle: () => {
+              return (
+                  <Image
+                    source={require('../../assets/icon.png')}
+                    style={{ width: 32, height: 32 }}
+                  />
+              );
+            },
+            headerShadowVisible: false,
+          }}
+        />
+        <Stack.Screen
+          name="search"
+        />
+        <Stack.Screen
+          name="add-post"
+        />
+        <Stack.Screen
+          name="notifications"
+        />
+        <Stack.Screen
+          name="profile/index"
+          options={{
+            headerBackVisible: false,
+            title: "",
+            headerStyle: {
+              backgroundColor: colors.background,
+              borderBottomColor: "transparent",
+              shadowColor: "transparent",
+              height: 50,
+              paddingBottom: 0,
+              paddingTop: 0,
+              borderTopWidth: 0,
+              elevation: 0, 
+            },
+            headerTitle: () => {
+              return (
+                  <Image
+                    source={require('../../assets/icon.png')}
+                    style={{ width: 32, height: 32 }}
+                  />
+              );
+            },
+            headerShadowVisible: false,
+
+            headerRight: () => (
+              <TouchableOpacity onPress={() => setMenuVisible(true)}>
+                <FontAwesomeIcon icon={faBars} size={24} color={colors.icon} />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Stack.Screen
+        />
+      </Stack>
+      <NavigationBar />
+      <MenuPopup isVisible={isMenuVisible} onClose={() => setMenuVisible(false)} />
+    {/* <Tabs
       screenOptions={{
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.textSecondary,
@@ -88,7 +162,7 @@ function TabLayout() {
           ),
         }}
       />
-    </Tabs>
+    </Tabs> */}
     </ProfileProvider>
   );
 }

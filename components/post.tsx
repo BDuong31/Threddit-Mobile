@@ -58,10 +58,17 @@ const Post: React.FC<PostProps> = ({
     setIsBookmarked(!isBookmarked);
   }
   return (
-    <View className="rounded-2xl px-3">
+    <View className="rounded-2xl">
       <View className="flex-row justify-between items-center mb-2">
         <View className="flex-row gap-[10px] items-center text-[16px]">
-          <Text style={{ color: colors.text }} className="font-bold">{username}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              router.push("profile/123");
+              }
+            }
+          >
+            <Text style={{ color: colors.text }} className="font-bold">{username}</Text>
+          </TouchableOpacity>
           <Text style={{ color: colors.textSecondary }} className="text-xs">{time}</Text>
         </View>
         <FontAwesomeIcon
