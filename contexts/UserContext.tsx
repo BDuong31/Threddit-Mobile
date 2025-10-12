@@ -1,4 +1,4 @@
-import { getUserProfile } from "apis/user";
+import { getUserFollow, getUserProfile } from "apis/user";
 import { IUser } from "../interfaces/user";
 import React from "react";
 
@@ -29,9 +29,13 @@ export function ProfileProvider({ children }: { children: React.ReactNode }) {
         setLoading(true);
         setError(null);
         try {
-            const response = await getUserProfile();
-            setUser(response.data);
-            console.log("User profile fetched:", response.data);
+            const responseUser = await getUserProfile();
+            const responseFollowCount = await getUserFollow();
+            const data = {
+                ...responseUser.data,
+                ...responseFollowCount.data
+            }
+            setUser(data);
         } catch (err) {
             setError(err as Error);
         } finally {

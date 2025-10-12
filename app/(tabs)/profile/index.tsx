@@ -22,6 +22,10 @@ import { faBars } from '@fortawesome/free-solid-svg-icons';
 import { useLayoutEffect } from 'react';
 import MenuPopup from "components/menuPopup";
 import Post from "components/post";
+import { useUser } from "contexts/UserContext";
+import { Posts } from "interfaces/post";
+import { getPostSave, getPostsUser } from "apis/post";
+import { relativeTime } from "lib/relative-time";
 
 const CACHE_DURATION = 5 * 60 * 1000;
 
@@ -55,17 +59,67 @@ interface FriendUser {
 }
 
 export default function ProfileScreen() {
+    const { user } = useUser();
     const { colors } = useTheme();
     const [isMenuVisible, setMenuVisible] = useState(false);
     const [isActive, setIsActive] = useState('Post');
+    const [ posts, setPosts ] = useState<Posts>();
+    const [ savedPosts, setSavedPosts ] = useState<Posts>();
+    const [ loading, setLoading ] = useState(false);
+
+    React.useEffect(() => {
+        const fetchPosts = async () => {
+          setLoading(true);
+          try {
+            const response = await getPostsUser();
+            setPosts(response.data);
+          } catch (error) {
+            console.error("Error fetching posts:", error);
+            Alert.alert("Error", "There was an error fetching posts.");
+            setLoading(false);
+          } finally {
+            setLoading(false);
+          }
+        }
+
+        const fetchSavedPosts = async () => {
+          setLoading(true);
+          try {
+            const response = await getPostSave(null);
+            setSavedPosts(response.data);
+          } catch (error) {
+            console.error("Error fetching saved posts:", error);
+            Alert.alert("Error", "There was an error fetching saved posts.");
+            setLoading(false);
+          } finally {
+            setLoading(false);
+          }
+        }
+
+        if (isActive === 'Post') {
+          fetchPosts();
+        } else if (isActive === 'Bookmark') {
+          fetchSavedPosts();
+        }
+
+        fetchPosts();
+      }, [isActive]);
 
     return (
         <View className="flex- pt-4 " style={{ backgroundColor: colors.background }}>
           <View className="flex px-3" >          
-¥            <Text className="font-bold text-[24px]" style={{ color: colors.text }}>Name_user</Text>
+            <Text className="font-bold text-[24px]" style={{ color: colors.text }}>{user?.username}</Text>
             <View className="flex px-2">
-              <Text className="font-light text-[14px]" style={{ color: colors.text }}>999+ followers</Text>
-              <Text className="font-light text-[14px]" style={{ color: colors.text }}>999+ following</Text>
+              <TouchableOpacity
+                onPress={() => { router.push(`/profile/${user?.username}/follow?tab=followers`) }}
+              >
+                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followerNumber} followers</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => { router.push(`/profile/${user?.username}/follow?tab=following`) }}
+              >
+                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followingNumber} following</Text>
+              </TouchableOpacity>
             </View>
           </View>
           <View className="flex-row h-11 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
@@ -83,8 +137,50 @@ export default function ProfileScreen() {
               <Text style={{color: colors.text}} className="font-bold text-[16px]">Bookmark</Text>
             </TouchableOpacity>
           </View>
-            <ScrollView className="px-3 w-full" showsVerticalScrollIndicator={false}>
-                {Array.from({ length: 5 }).map((_, i) => (
+            <ScrollView className="px-3 w-full h-full" showsVerticalScrollIndicator={false}>
+              { isActive === 'Post' ? (
+                  !posts ? (
+                    <Text style={{ color: colors.text }} className="text-center mt-5">No posts available.</Text>
+                  ) : (
+                    posts.posts?.map((post) => (
+                      <Post
+                       key={post.id}
+                       id={post.id}
+                       username={user?.username || "Unknown"}
+                       content={post.content}
+                       isPinned={post.isPinned}
+                       time={relativeTime(post.createdAt, Date.now())}
+                       commentCount={post.commentNumber || 0}
+                       saveCount={post.saveNumber || 0}
+                       mentionedUser={post.mentionedUser || []}
+                       upvoteNumber={post.upvoteNumber || 0}
+                       downvoteNumber={post.downvoteNumber || 0}
+                      />
+                    ))
+                  )
+                ) : (
+                  !savedPosts ? (
+                    <Text style={{ color: colors.text }} className="text-center mt-5">No saved posts available.</Text>
+                  ) : (
+                    savedPosts.posts?.map((post) => (
+                      <Post
+                       key={post.id}
+                       id={post.id}
+                       username={user?.username || "Unknown"}
+                       content={post.content}
+                       isPinned={post.isPinned}
+                       time={relativeTime(post.createdAt, Date.now())}
+                       commentCount={post.commentNumber || 0}
+                       saveCount={post.saveNumber || 0}
+                       mentionedUser={post.mentionedUser || []}
+                       upvoteNumber={post.upvoteNumber || 0}
+                       downvoteNumber={post.downvoteNumber || 0}
+                      />
+                    ))
+                  )
+                )
+              }
+                {/* {Array.from({ length: 5 }).map((_, i) => (
                     <Post
                         key={i}
                         username="Name_User"
@@ -95,7 +191,7 @@ export default function ProfileScreen() {
                         shares={999}
                         saves={999}
                     />
-                ))}
+                ))} */}
             </ScrollView>
         </View>
     )

@@ -18,7 +18,7 @@ function RootLayoutContent() {
     const inAuthGroup = segments[0] === '(auth)'; 
 
     if (isAuthenticated && inAuthGroup) {
-      router.replace('/(tabs)/home/post/123');
+      router.replace('/(tabs)');
     } else if (!isAuthenticated && !inAuthGroup) {
       router.replace('/(auth)/login');
     }
@@ -55,12 +55,6 @@ function RootLayoutContent() {
         />
         <Stack.Screen
           name="(tabs)"
-          options={{
-            headerShown: false,
-          }}
-        />
-          <Stack.Screen
-          name="(tabs)/home"
           options={{
             headerShown: false,
           }}

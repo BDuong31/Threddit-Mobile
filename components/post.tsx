@@ -8,23 +8,28 @@ import { faCommentDots as faCommentRegular, faPaperPlane as faPaperPlaneRegular,
 import { router } from "expo-router";
 
 interface PostProps {
+  id: string;
   username: string;
-  time: string;
   content: string;
-  likes?: number;
-  comments?: number;
-  shares?: number;
-  saves?: number;
+  isPinned: boolean;
+  time: string;
+  commentCount?: number;
+  saveCount?: number;
+  mentionedUser: any[];
+  upvoteNumber?: number;
+  downvoteNumber?: number;
 }
 
 const Post: React.FC<PostProps> = ({
+  id,
   username,
   time,
   content,
-  likes = 0,
-  comments = 0,
-  shares = 0,
-  saves = 0,
+  commentCount = 0,
+  saveCount = 0,
+  mentionedUser = [],
+  upvoteNumber = 0,
+  downvoteNumber = 0,
 }) => {
   const { colors } = useTheme();
   const [isLiked, setIsLiked] = React.useState(false);
@@ -102,7 +107,7 @@ const Post: React.FC<PostProps> = ({
               }}
             />
           </TouchableOpacity>
-          <Text style={{ color: colors.text }} className="text-xs">{likes}+</Text>
+          <Text style={{ color: colors.text }} className="text-xs">{upvoteNumber - downvoteNumber}</Text>
           <TouchableOpacity 
             className="flex-row items-center space-x-1"
             onPress={handleDislike}
@@ -125,7 +130,7 @@ const Post: React.FC<PostProps> = ({
               size={18} 
               color={colors.icon}
             />
-          <Text style={{ color: colors.text}} className="text-xs">{comments}+</Text>
+          <Text style={{ color: colors.text}} className="text-xs">{commentCount}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={{ stroke: colors.icon, backgroundColor: colors.surface }} className="flex-row items-center space-x-1 p-[10px] rounded-[50px] gap-[5px]">
@@ -134,7 +139,6 @@ const Post: React.FC<PostProps> = ({
             size={18} 
             color={colors.icon}
           />
-          <Text style={{ color: colors.text }} className="text-xs">{shares}+</Text>
         </TouchableOpacity>
 
         <TouchableOpacity 
@@ -146,7 +150,7 @@ const Post: React.FC<PostProps> = ({
             size={18} 
             color={isBookmarked ? colors.warning : colors.icon}
           />
-          <Text style={{ color: colors.text }} className="text-xs">{shares}+</Text>
+          <Text style={{ color: colors.text }} className="text-xs">{saveCount}</Text>
         </TouchableOpacity>
       </View>
       <View className="border-b my-3" style={{ borderColor: colors.border }}></View>

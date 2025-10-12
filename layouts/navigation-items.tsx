@@ -36,7 +36,7 @@ import { useTheme } from 'contexts/ThemeContext';
         update: { status: true, count: 0 },
         IconSolid: <FontAwesomeIcon icon={faBellSolid} size={24} color={colors.text} />,
         IconRegular: <FontAwesomeIcon icon={faBellRegular} size={24} color={colors.text} />,
-        path: '/notifications',
+        path: '/notification',
       },
 
       {

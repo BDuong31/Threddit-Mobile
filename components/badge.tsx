@@ -12,9 +12,9 @@ const Badge = ({ content }: Props) => {
     const { colors } = useTheme();
     if (content) {
         return (
-            <View className='relative z-20'>
-                <View className='h-5 w-5 text-center rounded-full flex items-center justify-center' style={{ backgroundColor: colors.error }} >
-                    <Text className="text-center text-[12px]" >{content}</Text>
+            <View className='relative z-20 p-[1px]'>
+                <View className='text-center rounded-full flex justify-center items-center h-5 w-5 p-1' style={{ backgroundColor: colors.error}} >
+                    <Text className="text-center text-[10px]" >{content}</Text>
                 </View>
             </View>
         );
@@ -22,7 +22,7 @@ const Badge = ({ content }: Props) => {
 
     return (
         <View className="relative z-20 rounded-full" style={{ backgroundColor: colors.error }}>
-            <View className="h-4 w-4 flex items-center justify-center rounded-full" />
+            <View className="h-2 w-2 flex items-center justify-center rounded-full" />
         </View>
     );
 };

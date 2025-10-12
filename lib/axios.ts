@@ -1,7 +1,8 @@
 import axios, { AxiosRequestConfig } from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-const HOST_API = "https://threddit.onrender.com/api"; // đổi thành API backend của bạn
+export const HOST_API = "https://threddit.onrender.com/api"; // đổi thành API backend của bạn
 
 const axiosInstance = axios.create({ baseURL: HOST_API });
 
@@ -52,5 +53,35 @@ export const endpoints = {
         updatePasssword: "/account/updatepassword",
         updateUsername: "/account/updateusername",
         userInfo: "/account/getuserinfo",
+    },
+
+    follow: {
+        followUserMe: "/follow/me/count",
+        followUser: (username: string) => `/follow/${username}/count`,
+        followersUserMe: "/follow/me/followers",
+        followersUser: (username: string) => `/follow/${username}/followers`,
+        followingsUserMe: "/follow/me/followings",
+        followingsUser: (username: string) => `/follow/${username}/followings`,
+        follow: (username: string) => `/follow/${username}`,
+        unfollow: (username: string) => `/follow/${username}`,
+        isFollow: (username: string) => `/follow/${username}/state`
+    },
+
+    post: {
+      postMe: "/post/me/createdpost",
+      getPostsByUsername: (username: string, cursor: string | null) => 
+        cursor ? `/post/${username}/createdpost?cursor=${cursor}` : `/post/${username}/createdpost`,
+      getSavePosts: (cursor: string | null) => 
+        cursor ? `/post/me/savedpost?cursor=${cursor}` : `/post/me/savedpost`,
+    },
+
+    notification: {
+      listenNotification: "/notification/listen",
+      getNotifications: (cursor: string | null) => 
+        cursor ? `/notification?cursor=${cursor}` : `/notification`,
+      getNotificationUnRead: (cursor: string | null) => 
+        cursor ? `/notification/unread?cursor=${cursor}` : `/notification/unread`,
+      readNotification: (id: string) => `/notification/${id}/read`,
+      getNotificationCountUnRead: "/notification/count/unread",
     }
 }

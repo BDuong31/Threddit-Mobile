@@ -19,16 +19,16 @@ import { getUserProfile } from "apis/user";
 import { signOut } from "apis/auth";
 import { useAuth } from "contexts/AuthContext";
 import Post from "components/post";
-export default function HomeScreen() {
+export default function Home() {
     const { colors } = useTheme();
     const [loading, setLoading] = useState(false);
     const [user, setUser] = useState(null);
     const { setToken } = useAuth();
+    const [isActive, setIsActive] = useState<'Trend' | 'Following'>('Trend');
     useEffect(() => {
         const fetchUser = async () => {
             try {
                 const response = await getUserProfile();
-                console.log("User profile fetched:", response.data);
             } catch (error) {
                 console.error("Error fetching user profile:", error);
             }
@@ -37,18 +37,36 @@ export default function HomeScreen() {
     }, []);
 
     return (
-        <View style={{ backgroundColor: colors.background }} className="flex-row pt-4">
-            <ScrollView className="px-3 w-full" style={{ backgroundColor: colors.background }} showsVerticalScrollIndicator={false}>
+        <View style={{ backgroundColor: colors.background }} className="flex-col pt-4 h-full">
+            <View className="flex-row h-11 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
+                <TouchableOpacity
+                style={[ isActive === 'Trend' ? { backgroundColor: colors.surface } : {}]}
+                className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
+                onPress={() => { setIsActive('Trend') }}
+                >
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Trend</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                style={[ isActive === 'Following' ? { backgroundColor: colors.surface } : {}]}
+                className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
+                onPress={() => { setIsActive('Following') }}>
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Following</Text>
+                </TouchableOpacity>
+            </View>
+            <ScrollView className="px-3 w-full h-full" style={{ backgroundColor: colors.background }} showsVerticalScrollIndicator={false}>
                 {Array.from({ length: 5 }).map((_, i) => (
                     <Post
-                        key={i}
-                        username="Name_User"
-                        time="99 giờ trước"
-                        content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum."
-                        likes={999}
-                        comments={999}
-                        shares={999}
-                        saves={999}
+                       key={`placeholder-post-${i}`} 
+                       id={`placeholder-post-${i}`}  
+                       username="john_doe"
+                       content="Hello, this is my first post!"
+                       isPinned={false}
+                       time="2 hours ago"
+                       commentCount={0}
+                       saveCount={0}
+                       mentionedUser={[]}
+                       upvoteNumber={0}
+                       downvoteNumber={0}
                     />
                 ))}
             </ScrollView>
