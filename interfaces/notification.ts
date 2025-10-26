@@ -14,5 +14,5 @@ export interface Notification {
 
 export interface UnreadNotification {
     cursor: string | null;
-    unreadNotifications: number;
+    notifications: INotification[];
 }

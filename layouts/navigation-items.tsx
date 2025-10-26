@@ -28,7 +28,7 @@ import { useTheme } from 'contexts/ThemeContext';
         title: "Add Post",
         IconSolid: <FontAwesomeIcon icon={faAdd} size={24} color={colors.text} />,
         IconRegular: <FontAwesomeIcon icon={faAdd} size={24} color={colors.text} />,
-        path: '/add-post',
+        path: '/addPost',
       },
 
       {

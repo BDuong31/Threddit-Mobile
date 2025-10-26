@@ -38,7 +38,7 @@ export default function Home() {
 
     return (
         <View style={{ backgroundColor: colors.background }} className="flex-col pt-4 h-full">
-            <View className="flex-row h-11 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
+            <View className="flex-row h-12 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
                 <TouchableOpacity
                 style={[ isActive === 'Trend' ? { backgroundColor: colors.surface } : {}]}
                 className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"

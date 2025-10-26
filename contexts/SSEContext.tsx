@@ -2,30 +2,59 @@ import React, { createContext, useContext, useEffect, useState, useRef } from "r
 import { EventSourcePolyfill } from 'event-source-polyfill';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosInstance, { endpoints, HOST_API } from "../lib/axios";
-import { getNotificationCountUnRead, getNotifications, getNotificationUnRead, readNotifications } from "apis/notifcation";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { getNotificationCountUnRead, getNotifications, readNotifications, getNotificationUnRead } from "apis/notifcation";
 import { INotification } from "interfaces/notification";
 
 interface SSEContextProps {
   notifications: INotification[];
+  notificationsUnRead: INotification[];
   notificationCount: number;
   connect: () => Promise<void>;
   readNotification: (id: string) => Promise<void>;
   isConnected: boolean;
   disconnect: () => void;
+
+  fetchMoreNotificationsAll: () => Promise<void>;
+  isLoadingMoreAll: boolean;
+  hasNextPageAll: boolean;
+
+  fetchMoreNotificationsUnRead: () => Promise<void>;
+  isLoadingMoreUnRead: boolean;
+  hasNextPageUnRead: boolean;
 }
 
 const SSEContext = createContext<SSEContextProps>({
   notifications: [],
+  notificationsUnRead: [],
   notificationCount: 0,
   connect: async () => {},
   readNotification: async (id: string) => {},
   isConnected: false,
   disconnect: () => {},
+
+  fetchMoreNotificationsAll: async () => {},
+  isLoadingMoreAll: false,
+  hasNextPageAll: false,
+
+  fetchMoreNotificationsUnRead: async () => {},
+  isLoadingMoreUnRead: false,
+  hasNextPageUnRead: false,
 });
 
 export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  // State cho 'All'
   const [notifications, setNotifications] = useState<INotification[]>([]);
+  const [nextCursorAll, setNextCursorAll] = useState<string | null>(null);
+  const [isLoadingMoreAll, setIsLoadingMoreAll] = useState(false);
+  const [hasNextPageAll, setHasNextPageAll] = useState(true);
+
+  // State cho 'UnRead'
+  const [notificationsUnRead, setNotificationsUnRead] = useState<INotification[]>([]);
+  const [nextCursorUnRead, setNextCursorUnRead] = useState<string | null>(null);
+  const [isLoadingMoreUnRead, setIsLoadingMoreUnRead] = useState(false);
+  const [hasNextPageUnRead, setHasNextPageUnRead] = useState(true);
+
+  // State chung
   const [notificationCount, setNotificationCount] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const eventSourceRef = useRef<EventSource | null>(null);
@@ -54,7 +83,9 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         try {
           const data = JSON.parse(event.data);
           getNotificationCount();
+          // FIX 1: Thêm vào cả 2 danh sách
           setNotifications((prev) => [data, ...prev]);
+          setNotificationsUnRead((prev) => [data, ...prev]);
         } catch (err) {
           console.warn("Lỗi parse SSE message:", err);
         }
@@ -78,24 +109,83 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
   };
 
-  const getNotification= async() => {
+  // --- Logic cho 'All' ---
+  const fetchNotificationsAll = async (cursor: string | null = null) => {
+    if (isLoadingMoreAll) return;
+    const loadingMore = cursor !== null;
+    if (loadingMore) {
+      if (!hasNextPageAll) return;
+      setIsLoadingMoreAll(true);
+    }
+
     try {
-        const responseNotification = await getNotifications(null);
-        setNotifications(responseNotification.data.notifications);
+      const response = await getNotifications(cursor);
+      const newNotifications = response.data?.notifications || []; // Đảm bảo là mảng
+      const newCursor = response.data?.cursor;
+
+      setNotifications((prev) => loadingMore ? [...prev, ...newNotifications] : newNotifications);
+      setNextCursorAll(newCursor);
+      setHasNextPageAll(!!newCursor);
     } catch (err) {
-        console.error("Lỗi lấy thông báo:", err);
+      console.error("Lỗi lấy thêm thông báo:", err);
+    } finally {
+      if (loadingMore) {
+        setIsLoadingMoreAll(false);
+      }
     }
   }
 
+  const fetchMoreNotificationsAll = async () => {
+    await fetchNotificationsAll(nextCursorAll);
+  }
+
+  // --- Logic cho 'UnRead' ---
+  const fetchNotificationsUnRead = async (cursor: string | null = null) => {
+    if (isLoadingMoreUnRead) return;
+    const loadingMore = cursor !== null;
+    if (loadingMore) {
+      if (!hasNextPageUnRead) return;
+      setIsLoadingMoreUnRead(true);
+    }
+
+    try {
+      const response = await getNotificationUnRead(cursor);
+      const newNotifications = response.data?.notifications || []; // Đảm bảo là mảng
+      // FIX 3: Sửa 'cursor' thành 'nextCursor'
+      const newCursor = response.data?.cursor;
+
+      setNotificationsUnRead((prev) => loadingMore ? [...prev, ...newNotifications] : newNotifications);
+      setNextCursorUnRead(newCursor);
+      setHasNextPageUnRead(!!newCursor);
+    } catch (err) {
+      console.error("Lỗi lấy thêm thông báo chưa đọc:", err);
+    } finally {
+      if (loadingMore) {
+        setIsLoadingMoreUnRead(false);
+      }
+    }
+  }
+
+  const fetchMoreNotificationsUnRead = async () => {
+    await fetchNotificationsUnRead(nextCursorUnRead);
+  }
+
+  // --- Logic chung ---
   const readNotification = async (id: string) => {
     try {
       const response = await readNotifications(id);
       console.log("Đánh dấu thông báo đã đọc:", response);
+      
+      // Cập nhật list 'All'
       setNotifications((prev) =>
         prev.map((notif) =>
           notif.id === id ? { ...notif, isRead: true } : notif
         )
       );
+      
+      // FIX 2: Xóa khỏi list 'UnRead'
+      setNotificationsUnRead((prev) => prev.filter((notif) => notif.id !== id));
+      
       getNotificationCount();
     } catch (err) {
       console.error("Lỗi đánh dấu thông báo đã đọc:", err);
@@ -113,7 +203,9 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     connect();
-    getNotification();
+    // FIX 4: Gọi hàm fetch gốc với 'null' để tải trang đầu tiên
+    fetchNotificationsAll(null);
+    fetchNotificationsUnRead(null);
     getNotificationCount();
     return () => disconnect();
   }, []);
@@ -121,7 +213,21 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   console.log("SSE Connections:", isConnected );
 
   return (
-    <SSEContext.Provider value={{ notifications, connect, disconnect, isConnected, readNotification, notificationCount }}>
+    <SSEContext.Provider value={{ 
+        notifications, 
+        notificationsUnRead, 
+        connect, 
+        disconnect, 
+        isConnected, 
+        readNotification, 
+        notificationCount, 
+        fetchMoreNotificationsAll, 
+        isLoadingMoreAll, 
+        hasNextPageAll, 
+        fetchMoreNotificationsUnRead, 
+        isLoadingMoreUnRead, 
+        hasNextPageUnRead
+    }}>
       {children}
     </SSEContext.Provider>
   );

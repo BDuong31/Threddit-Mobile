@@ -42,9 +42,16 @@ const Notification: React.FC<NotificationProps> = ({
         className="rounded-2xl"
         style={{ backgroundColor: isRead ? colors.background : colors.surface }}
         onPress={() => {
-            Alert.alert("Notification Clicked", `You clicked on notification: ${content}`);
             if (!isRead) {
                 readNotification && readNotification(id);
+            }
+            if (type === 'follow') {
+                router.push(`profile/${target}`);
+                return;
+            }
+            if (type === 'like' || type === 'comment') {
+                router.push(`post/${target}`);
+                return;
             }
         }}
         >

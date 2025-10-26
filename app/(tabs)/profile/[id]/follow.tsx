@@ -11,6 +11,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    ActivityIndicator,
     View,
     Image
 } from "react-native";
@@ -71,10 +72,18 @@ export default function FollowScreen() {
     const { colors } = useTheme();
     const [isMenuVisible, setMenuVisible] = useState(false);
     const [isActive, setIsActive] = useState(tab);
-    const [followers, setFollowers] = useState<Follower>();
-    const [followings, setFollowings] = useState<Following>();
     const navigation = useNavigation();
-    
+
+    const [followers, setFollowers] = useState<Follower>();
+    const [nextCursorFollowers, setNextCursorFollowers] = useState<string | null>(null);
+    const [isLoadingMoreFollowers, setIsLoadingMoreFollowers] = useState(false);
+    const [hasNextPageFollowers, setHasNextPageFollowers] = useState(true);
+
+    const [followings, setFollowings] = useState<Following>();
+    const [nextCursorFollowings, setNextCursorFollowings] = useState<string | null>(null);
+    const [isLoadingMoreFollowings, setIsLoadingMoreFollowings] = useState(false);
+    const [hasNextPageFollowings, setHasNextPageFollowings] = useState(true);
+
     useLayoutEffect(() => {
         navigation.setOptions({
         headerTitle: () => {
@@ -106,50 +115,141 @@ export default function FollowScreen() {
         headerShadowVisible: false, 
         });
     })
-    const getUserFollower = async () => {
+    // const getUserFollower = async () => {
+    //   try {
+    //     if (isUserProfile) {
+    //       const response = await getUserFollowers(null);
+    //       setFollowers(response.data);
+    //     } else {
+    //       const response = await getUserFollowersByUsername(username, null);
+    //       setFollowers(response.data);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching followers:", error);
+    //   }
+    // }
+
+    const getUserFollower = async (cursor: string | null = null) => {
+      if (isLoadingMoreFollowers) return;
+      const loadingMore = cursor !== null;
+      if (loadingMore) {
+        if (!hasNextPageFollowers) return;
+        setIsLoadingMoreFollowers(true);
+      }
       try {
+        let response;
         if (isUserProfile) {
-          const response = await getUserFollowers();
-          setFollowers(response.data);
+          response = await getUserFollowers(cursor);
         } else {
-          const response = await getUserFollowersByUsername(username);
-          setFollowers(response.data);
+          response = await getUserFollowersByUsername(username, cursor);
         }
+
+        const newFollowers = response.data.followerList || [];
+        const newCursor = response.data.cursor;
+
+        if (loadingMore) {
+          setFollowers((prev) => ({
+            followerList: [...(prev?.followerList || []), ...newFollowers],
+            cursor: newCursor,
+          }));
+        } else {
+          setFollowers({
+            followerList: newFollowers,
+            cursor: newCursor,
+          });
+        }
+
+        setNextCursorFollowers(newCursor);
+        setHasNextPageFollowers(!!newCursor);
       } catch (error) {
         console.error("Error fetching followers:", error);
+      } finally {
+        if (loadingMore) {
+          setIsLoadingMoreFollowers(false);
+        }
       }
     }
 
-    const getUserFollowing = async () => {
+    // const getUserFollowing = async () => {
+    //   try {
+    //     if (isUserProfile) {
+    //       const response = await getUserFollowings(null);
+    //       setFollowings(response.data);
+    //     } else {
+    //       const response = await getUserFollowingByUsername(username);
+    //       setFollowings(response.data);
+    //     }
+    //   } catch (error) {
+    //     console.error("Error fetching following:", error);
+    //   }
+    // }
+
+    const getUserFollowing = async (cursor: string | null = null) => {
+      if (isLoadingMoreFollowings) return;
+      const loadingMore = cursor !== null;
+      if (loadingMore) {
+        if (!hasNextPageFollowings) return;
+        setIsLoadingMoreFollowings(true);
+      }
       try {
+        let response;
         if (isUserProfile) {
-          const response = await getUserFollowings();
-          setFollowings(response.data);
+          response = await getUserFollowings(cursor);
         } else {
-          const response = await getUserFollowingByUsername(username);
-          setFollowings(response.data);
+          response = await getUserFollowingByUsername(username, cursor);
         }
+
+        const newFollowings = response.data.followingList || [];
+        const newCursor = response.data.cursor;
+
+        if (loadingMore) {
+          setFollowings((prev) => ({
+            followingList: [...(prev?.followingList || []), ...newFollowings],
+            cursor: newCursor,
+          }));
+        } else {
+          setFollowings({
+            followingList: newFollowings,
+            cursor: newCursor,
+          });
+        }
+
+        setNextCursorFollowings(newCursor);
+        setHasNextPageFollowings(!!newCursor);
       } catch (error) {
         console.error("Error fetching following:", error);
+      } finally {
+        if (loadingMore) {
+          setIsLoadingMoreFollowings(false);
+        }
       }
     }
 
-    React.useEffect(() => {
-      if (isActive === 'followers') {
-        getUserFollower();
-      } else if (isActive === 'following') {
-        getUserFollowing();
-      }
-    }, []);
+    const fetchMoreFollowers = () => {
+      getUserFollower(nextCursorFollowers);
+    }
+
+    const fetchMoreFollowings = () => {
+      getUserFollowing(nextCursorFollowings);
+    }
 
     React.useEffect(() => {
+      setNextCursorFollowers(null);
+      setNextCursorFollowings(null);
+      setHasNextPageFollowers(true);
+      setHasNextPageFollowings(true);
+
       if (isActive === 'followers') {
-        getUserFollower();
+        getUserFollower(null);
       } else if (isActive === 'following') {
-        getUserFollowing();
+        getUserFollowing(null);
       }
     }, [isActive]);
-    
+
+    const renderFooter = (isLoading: boolean) => {
+        if (!isLoading) return null;
+        return <ActivityIndicator size="large" color={colors.text} style={{ marginVertical: 20 }} />;
+    };
     return (
         <View className="flex- pt-4 " style={{ backgroundColor: colors.background }}>
           <View className="flex-row h-11 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
@@ -169,30 +269,79 @@ export default function FollowScreen() {
           </View>
             <ScrollView className="px-3 w-full h-full" showsVerticalScrollIndicator={false}>
               {
+                // isActive === 'followers' ? (
+                //   followers?.followerList && followers?.followerList.length > 0 ? (
+                //     followers.followerList.map((followerItem) => (
+                //       <UserItem 
+                //         key={followerItem.follower.id}
+                //         username={followerItem.follower.username}
+                //         canFollow={followerItem.canFollow}
+                //       />
+                //     ))
+                //   ) : (
+                //     <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followers found.</Text>
+                //   )
+                // ) : (
+                //   followings?.followingList && followings?.followingList.length > 0 ? (
+                //     followings.followingList.map((followingItem) => (
+                //       <UserItem 
+                //         key={followingItem.followee.id}
+                //         username={followingItem.followee.username}
+                //         canFollow={followingItem.canFollow}
+                //       />
+                //     ))
+                //   ) : (
+                //     <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followings found.</Text>
+                //   )
+                // )
                 isActive === 'followers' ? (
-                  followers?.followerList && followers?.followerList.length > 0 ? (
-                    followers.followerList.map((followerItem) => (
+                  <FlatList
+                    data={followers?.followerList ?? []}
+                    renderItem={({ item }) => (
                       <UserItem 
-                        key={followerItem.follower.id}
-                        username={followerItem.follower.username}
-                        canFollow={followerItem.canFollow}
+                        username={item.follower.username}
+                        canFollow={item.canFollow}
                       />
-                    ))
-                  ) : (
-                    <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followers found.</Text>
-                  )
+                    )}
+                    keyExtractor={(item) => item.follower.id}
+                    style={{ paddingHorizontal: 12, flex: 1 }} // px-3 và flex: 1
+                    showsVerticalScrollIndicator={false}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={() => {
+                      if (!isLoadingMoreFollowers && hasNextPageFollowers) {
+                        fetchMoreFollowers();
+                      }
+                    }}
+                    ListFooterComponent={() => renderFooter(isLoadingMoreFollowers)}
+                    ListEmptyComponent={() => (
+                      !isLoadingMoreFollowers && 
+                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followers found.</Text>
+                    )}
+                  />
                 ) : (
-                  followings?.followingList && followings?.followingList.length > 0 ? (
-                    followings.followingList.map((followingItem) => (
+                  <FlatList
+                    data={followings?.followingList ?? []}
+                    renderItem={({ item }) => (
                       <UserItem 
-                        key={followingItem.followee.id}
-                        username={followingItem.followee.username}
-                        canFollow={followingItem.canFollow}
+                        username={item.followee.username}
+                        canFollow={item.canFollow}
                       />
-                    ))
-                  ) : (
-                    <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followings found.</Text>
-                  )
+                    )}
+                    keyExtractor={(item) => item.followee.id}
+                    style={{ paddingHorizontal: 12, flex: 1 }} // px-3 và flex: 1
+                    showsVerticalScrollIndicator={false}
+                    onEndReachedThreshold={0.5}
+                    onEndReached={() => {
+                      if (!isLoadingMoreFollowings && hasNextPageFollowings) {
+                        fetchMoreFollowings();
+                      }
+                    }}
+                    ListFooterComponent={() => renderFooter(isLoadingMoreFollowings)}
+                    ListEmptyComponent={() => (
+                      !isLoadingMoreFollowings && 
+                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followings found.</Text>
+                    )}
+                  />
                 )
               }
             </ScrollView>

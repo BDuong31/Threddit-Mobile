@@ -53,23 +53,39 @@ export const getUserFollowByUsername = async (usernname: string): Promise<IApiRe
     return response.data;
 }
 
-export const getUserFollowers = async (): Promise<IApiResponse<Follower>> => {
-    const response = await axiosInstance.get<IApiResponse<Follower>>(endpoints.follow.followersUserMe);
+export const getUserFollowers = async (cursor: string | null): Promise<IApiResponse<Follower>> => {
+    const response = await axiosInstance.get<IApiResponse<Follower>>(endpoints.follow.followersUserMe, {
+        params: {
+            cursor
+        }
+    });
     return response.data;
 }
 
-export const getUserFollowersByUsername = async (username: string): Promise<IApiResponse<Follower>> => {
-    const response = await axiosInstance.get<IApiResponse<Follower>>(endpoints.follow.followersUser(username));
+export const getUserFollowersByUsername = async (username: string, cursor: string | null): Promise<IApiResponse<Follower>> => {
+    const response = await axiosInstance.get<IApiResponse<Follower>>(endpoints.follow.followersUser(username), {
+        params: {
+            cursor
+        }
+    });
     return response.data;
 }
 
-export const getUserFollowings = async (): Promise<IApiResponse<Following>> => {
-    const response = await axiosInstance.get<IApiResponse<Following>>(endpoints.follow.followingsUserMe);
+export const getUserFollowings = async (cursor: string | null): Promise<IApiResponse<Following>> => {
+    const response = await axiosInstance.get<IApiResponse<Following>>(endpoints.follow.followingsUserMe, {
+        params: {
+            cursor
+        }
+    });
     return response.data;
 }
 
-export const getUserFollowingByUsername = async (username: string): Promise<IApiResponse<Following>> => {
-    const response = await axiosInstance.get<IApiResponse<Following>>(endpoints.follow.followingsUser(username));
+export const getUserFollowingByUsername = async (username: string, cursor: string | null): Promise<IApiResponse<Following>> => {
+    const response = await axiosInstance.get<IApiResponse<Following>>(endpoints.follow.followingsUser(username), {
+        params: {
+            cursor
+        }
+    });
     return response.data;
 }
 

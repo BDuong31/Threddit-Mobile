@@ -24,7 +24,7 @@ function TabLayout() {
   console.log("Current pathname:", pathname);
 
   React.useEffect(() => {
-    if (pathname.includes('/follow')) {
+    if (pathname.includes('/follow') || pathname.includes('/addPost')) {
       setHideNavigationBar(true);
     } else {
       setHideNavigationBar(false);
@@ -62,10 +62,63 @@ function TabLayout() {
             }}
           />
           <Stack.Screen
-            name="search"
+            name="search/index"
+            options={{
+              headerBackVisible: false,
+              title: "",
+              headerStyle: {
+                backgroundColor: colors.background,
+                borderBottomColor: "transparent",
+                shadowColor: "transparent",
+                height: 50,
+                paddingBottom: 0,
+                paddingTop: 0,
+                borderTopWidth: 0,
+                elevation: 0, 
+              },
+              headerTitle: () => {
+                return (
+                    <Image
+                      source={require('../../assets/icon.png')}
+                      style={{ width: 32, height: 32 }}
+                    />
+                );
+              },
+              headerShadowVisible: false,
+            }}
           />
           <Stack.Screen
-            name="add-post"
+            name="addPost/index"
+            options={{
+              headerBackVisible: false,
+              title: "",
+              headerStyle: {
+                backgroundColor: colors.background,
+                borderBottomColor: "transparent",
+                shadowColor: "transparent",
+                height: 50,
+                paddingBottom: 0,
+                paddingTop: 0,
+                borderTopWidth: 0,
+                elevation: 0, 
+              },
+              headerTitle: () => {
+                return (
+                    <Image
+                      source={require('../../assets/icon.png')}
+                      style={{ width: 32, height: 32 }}
+                    />
+                );
+              },
+              headerLeft: () => {
+                return (
+                    <TouchableOpacity className="flex-row items-center gap-2" onPress={() => router.back()}>
+                        <Text style={{ color: colors.text }} className="font-bold text-[16px]">Hủy</Text>
+                    </TouchableOpacity>
+                )
+              },
+              headerShadowVisible: false,
+            }}
           />
           <Stack.Screen
             name="notification/index"

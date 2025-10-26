@@ -122,7 +122,7 @@ export default function ProfileScreen() {
               </TouchableOpacity>
             </View>
           </View>
-          <View className="flex-row h-11 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
+          <View className="flex-row h-12 w-[94%] justify-around items-center border m-[3%] rounded-[10px]" style={{ borderColor: colors.border }}>
             <TouchableOpacity
               style={[ isActive === 'Post' ? { backgroundColor: colors.surface } : {}]}
               className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
