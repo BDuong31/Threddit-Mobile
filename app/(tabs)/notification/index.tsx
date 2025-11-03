@@ -34,6 +34,8 @@ export default function Home() {
             isLoadingMoreUnRead,
             hasNextPageUnRead
         } = useSSE();
+
+    console.log('notifications', notificationsUnRead);
     const { colors } = useTheme();
     const [loading, setLoading] = useState(false);
     const { setToken } = useAuth();
@@ -66,14 +68,14 @@ export default function Home() {
                     className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
                     onPress={() => { setIsActive('All') }}
                 >
-                    <Text style={{color: colors.text}} className="font-bold text-[16px]">All</Text>
+                    <Text style={{color: colors.text}} className="font-bold text-[16px]">Tất cả</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={[ isActive === 'UnRead' ? { backgroundColor: colors.surface } : {}]}
                     className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
                     onPress={() => { setIsActive('UnRead') }}
                 >
-                    <Text style={{color: colors.text}} className="font-bold text-[16px]">Un Read</Text>
+                    <Text style={{color: colors.text}} className="font-bold text-[16px]">Chưa đọc</Text>
                 </TouchableOpacity>
             </View>
             

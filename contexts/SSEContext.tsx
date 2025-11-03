@@ -83,7 +83,6 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         try {
           const data = JSON.parse(event.data);
           getNotificationCount();
-          // FIX 1: Thêm vào cả 2 danh sách
           setNotifications((prev) => [data, ...prev]);
           setNotificationsUnRead((prev) => [data, ...prev]);
         } catch (err) {
@@ -150,8 +149,7 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
     try {
       const response = await getNotificationUnRead(cursor);
-      const newNotifications = response.data?.notifications || []; // Đảm bảo là mảng
-      // FIX 3: Sửa 'cursor' thành 'nextCursor'
+      const newNotifications = response?.data?.unreadNotifications || [];
       const newCursor = response.data?.cursor;
 
       setNotificationsUnRead((prev) => loadingMore ? [...prev, ...newNotifications] : newNotifications);
@@ -183,7 +181,6 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
         )
       );
       
-      // FIX 2: Xóa khỏi list 'UnRead'
       setNotificationsUnRead((prev) => prev.filter((notif) => notif.id !== id));
       
       getNotificationCount();
@@ -203,7 +200,6 @@ export const SSEProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   useEffect(() => {
     connect();
-    // FIX 4: Gọi hàm fetch gốc với 'null' để tải trang đầu tiên
     fetchNotificationsAll(null);
     fetchNotificationsUnRead(null);
     getNotificationCount();

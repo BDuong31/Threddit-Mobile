@@ -73,6 +73,11 @@ export const endpoints = {
         cursor ? `/post/${username}/createdpost?cursor=${cursor}` : `/post/${username}/createdpost`,
       getSavePosts: (cursor: string | null) => 
         cursor ? `/post/me/savedpost?cursor=${cursor}` : `/post/me/savedpost`,
+      pinPost: (postId: string) => `/post/${postId}/pin`,
+      createPost: "/post",
+      deletePost: (postId: string) => `/post/${postId}`,
+      savePost: (postId: string) => `/post/${postId}/save`,
+      votePost: (postId: string, isUpVote?: boolean) => isUpVote !== undefined ? `/post/${postId}/vote/${isUpVote}` : `/post/${postId}/vote`,
     },
 
     notification: {

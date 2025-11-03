@@ -83,13 +83,13 @@ export default function SearchScreen() {
                 className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
                 onPress={() => { setIsActive('Post') }}
                 >
-                <Text style={{color: colors.text}} className="font-bold text-[16px]">Post</Text>
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Bài viết</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                 style={[ isActive === 'People' ? { backgroundColor: colors.surface } : {}]}
                 className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
                 onPress={() => { setIsActive('People') }}>
-                <Text style={{color: colors.text}} className="font-bold text-[16px]">People</Text>
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Người dùng</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView className="px-3 w-full h-full" style={{ backgroundColor: colors.background }} showsVerticalScrollIndicator={false}>

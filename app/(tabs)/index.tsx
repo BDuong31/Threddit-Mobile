@@ -44,13 +44,13 @@ export default function Home() {
                 className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
                 onPress={() => { setIsActive('Trend') }}
                 >
-                <Text style={{color: colors.text}} className="font-bold text-[16px]">Trend</Text>
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Xu hướng</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                 style={[ isActive === 'Following' ? { backgroundColor: colors.surface } : {}]}
                 className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
                 onPress={() => { setIsActive('Following') }}>
-                <Text style={{color: colors.text}} className="font-bold text-[16px]">Following</Text>
+                <Text style={{color: colors.text}} className="font-bold text-[16px]">Theo dõi</Text>
                 </TouchableOpacity>
             </View>
             <ScrollView className="px-3 w-full h-full" style={{ backgroundColor: colors.background }} showsVerticalScrollIndicator={false}>

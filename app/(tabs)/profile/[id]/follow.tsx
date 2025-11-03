@@ -258,13 +258,13 @@ export default function FollowScreen() {
               className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
               onPress={() => { setIsActive('followers') }}
             >
-              <Text style={{color: colors.text}} className="font-bold text-[16px]">Followers</Text>
+              <Text style={{color: colors.text}} className="font-bold text-[16px]">Người theo dõi</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[ isActive === 'following' ? { backgroundColor: colors.surface } : {}]}
               className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
               onPress={() => { setIsActive('following') }}>
-              <Text style={{color: colors.text}} className="font-bold text-[16px]">Following</Text>
+              <Text style={{color: colors.text}} className="font-bold text-[16px]">Người đang theo dõi</Text>
             </TouchableOpacity>
           </View>
             <ScrollView className="px-3 w-full h-full" showsVerticalScrollIndicator={false}>
@@ -304,7 +304,7 @@ export default function FollowScreen() {
                       />
                     )}
                     keyExtractor={(item) => item.follower.id}
-                    style={{ paddingHorizontal: 12, flex: 1 }} // px-3 và flex: 1
+                    style={{ paddingHorizontal: 12, flex: 1 }} 
                     showsVerticalScrollIndicator={false}
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
@@ -315,7 +315,7 @@ export default function FollowScreen() {
                     ListFooterComponent={() => renderFooter(isLoadingMoreFollowers)}
                     ListEmptyComponent={() => (
                       !isLoadingMoreFollowers && 
-                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followers found.</Text>
+                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>Không có người theo dõi.</Text>
                     )}
                   />
                 ) : (
@@ -328,7 +328,7 @@ export default function FollowScreen() {
                       />
                     )}
                     keyExtractor={(item) => item.followee.id}
-                    style={{ paddingHorizontal: 12, flex: 1 }} // px-3 và flex: 1
+                    style={{ paddingHorizontal: 12, flex: 1 }} 
                     showsVerticalScrollIndicator={false}
                     onEndReachedThreshold={0.5}
                     onEndReached={() => {
@@ -339,7 +339,7 @@ export default function FollowScreen() {
                     ListFooterComponent={() => renderFooter(isLoadingMoreFollowings)}
                     ListEmptyComponent={() => (
                       !isLoadingMoreFollowings && 
-                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>No followings found.</Text>
+                      <Text style={{ color: colors.text, textAlign: 'center', marginTop: 20 }}>Không có người đang theo dõi.</Text>
                     )}
                   />
                 )

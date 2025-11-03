@@ -15,3 +15,8 @@ export interface Posts {
     cursor: string | null;
     posts: IPost[];
 }
+
+export interface CreatePost {
+    content: string;
+    mentionedUser?: string[];
+}

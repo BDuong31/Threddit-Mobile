@@ -113,12 +113,12 @@ export default function ProfileScreen() {
               <TouchableOpacity
                 onPress={() => { router.push(`/profile/${user?.username}/follow?tab=followers`) }}
               >
-                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followerNumber} followers</Text>
+                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followerNumber} Người theo dõi</Text>
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => { router.push(`/profile/${user?.username}/follow?tab=following`) }}
               >
-                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followingNumber} following</Text>
+                <Text className="font-light text-[14px]" style={{ color: colors.text }}>{user?.followingNumber} Người đang theo dõi</Text>
               </TouchableOpacity>
             </View>
           </View>
@@ -128,13 +128,13 @@ export default function ProfileScreen() {
               className="w-1/2 h-full justify-center items-center rounded-tl-[10px] rounded-bl-[10px]"
               onPress={() => { setIsActive('Post') }}
             >
-              <Text style={{color: colors.text}} className="font-bold text-[16px]">Post</Text>
+              <Text style={{color: colors.text}} className="font-bold text-[16px]">Bài viết</Text>
             </TouchableOpacity>
             <TouchableOpacity
               style={[ isActive === 'Bookmark' ? { backgroundColor: colors.surface } : {}]}
               className="w-1/2 h-full justify-center items-center rounded-tr-[10px] rounded-br-[10px]"
               onPress={() => { setIsActive('Bookmark') }}>
-              <Text style={{color: colors.text}} className="font-bold text-[16px]">Bookmark</Text>
+              <Text style={{color: colors.text}} className="font-bold text-[16px]">Đã lưu</Text>
             </TouchableOpacity>
           </View>
             <ScrollView className="px-3 w-full h-full" showsVerticalScrollIndicator={false}>
